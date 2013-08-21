@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Intermediate R</title>
+  <meta charset="utf-8">
+  <meta name="description" content="Intermediate R">
+  <meta name="author" content="Abhijit Dasgupta">
+  <meta name="generator" content="slidify" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  <link rel="stylesheet" href="libraries/frameworks/io2012/css/default.css" media="all" >
+  <link rel="stylesheet" href="libraries/frameworks/io2012/phone.css" 
+    media="only screen and (max-device-width: 480px)" >
+  <link rel="stylesheet" href="libraries/frameworks/io2012/css/slidify.css" >
+  <link rel="stylesheet" href="libraries/highlighters/highlight.js/css/tomorrow.css" />
+  <base target="_blank"> <!-- This amazingness opens all links in a new tab. -->
+  <script data-main="libraries/frameworks/io2012/js/slides" 
+    src="libraries/frameworks/io2012/js/require-1.0.8.min.js">
+  </script>
+  
+    <link rel="stylesheet" href = "assets/css/ribbons.css">
+
+</head>
+<body style="opacity: 0">
+  <slides class="layout-widescreen">
+    
+    <!-- LOGO SLIDE -->
+    <!-- END LOGO SLIDE -->
+    
+
+    <!-- TITLE SLIDE -->
+    <!-- Should I move this to a Local Layout File? -->
+    <slide class="title-slide segue nobackground">
+      <hgroup class="auto-fadein">
+        <h1>Intermediate R</h1>
+        <h2>Part I Prequel</h2>
+        <p>Abhijit Dasgupta<br/>ARAASTAT</p>
+      </hgroup>
+          </slide>
+
+    <!-- SLIDES -->
+      <slide class="segue dark" id="slide-1" style="background:;">
+  <hgroup>
+    <h2>Warmup exercises</h2>
+  </hgroup>
+  <article>
+    
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+      <slide class="" id="slide-2" style="background:;">
+  <hgroup>
+    <h2>Air Quality</h2>
+  </hgroup>
+  <article>
+    <ol>
+<li>Using the dataset <code>airquality</code>, create a data.frame giving the 
+average, minimum and maximum monthly temperature and ozone level</li>
+<li>Using the same dataset, create plots of daily temperature and ozone levels for each month</li>
+<li>Create a panel of plots (in a single window) showing the daily temperature pattern by month</li>
+<li>Create plot(s) showing how ozone relates to wind, temperature and solar radiation</li>
+</ol>
+
+<p>For details about the dataset, try <code>?airquality</code>.</p>
+
+<p>For hints, press <code>p</code></p>
+
+
+  </article>
+  <!-- Presenter Notes -->
+  <aside class="note">
+    <section>
+      <pre><code class="r">data(airquality)
+library(plyr)
+library(ggplot2)
+ddply(airquality, ~Month, summarise, ...)
+aq5 &lt;- subset(airquality, Month == 5)
+plot(Ozone ~ Day, data = aq5)
+
+ggplot(airquality, aes(x = Day, y = Ozone)) + geom_point() + facet_wrap(~Month)
+
+pairs(airquality[, c(&quot;Ozone&quot;, &quot;Wind&quot;, &quot;Temp&quot;)])
+
+</code></pre>
+
+    </section>
+  </aside>
+</slide>
+
+      <slide class="" id="slide-3" style="background:;">
+  <hgroup>
+    <h2>Air Quality</h2>
+  </hgroup>
+  <article>
+    <p>The R function <code>lm</code> stands for <strong>linear model</strong> and does linear regression.</p>
+
+<p>Recall that we can write regressions like formulas:</p>
+
+<pre><code>lm(y ~ x1 + x2 + x3, data=dat)
+</code></pre>
+
+<ol>
+<li>Fit a linear regression model to see how ozone level relates to temperature, wind speed and solar radiation levels, making sure you store the result in an object (say <code>model1</code>).</li>
+<li>Use <code>summary(model1)</code> to see the results. Store this in an object</li>
+<li>Use the object created above to compute 95% confidence intervals for each coefficient
+
+<ul>
+<li>Use the function <code>names</code> to see components of the object</li>
+<li>Use matrix extraction rules to extract appropriate columns</li>
+</ul></li>
+</ol>
+
+<p>Hints on pressing <code>p</code></p>
+
+
+  </article>
+  <!-- Presenter Notes -->
+  <aside class="note">
+    <section>
+      <pre><code class="r">model1 &lt;- lm(Ozone ~ Temp + Wind, data = airquality)
+summ1 &lt;- summary(model1)
+names(summ1)
+summ1$coef
+is.data.frame(summ1$coef)
+
+</code></pre>
+
+    </section>
+  </aside>
+</slide>
+
+      <slide class="" id="slide-4" style="background:;">
+  <hgroup>
+    <h2>Air quality</h2>
+  </hgroup>
+  <article>
+    <p>You can write functions in R to encapsulate repeatable tasks. The general format for functions is</p>
+
+<pre><code>functionName &lt;- function(arg1, arg2,){
+  # Code to be evaluated
+}
+</code></pre>
+
+<ol>
+<li>Write a function that takes as input the result of a linear regression and the confidence level and outputs a data.frame with each row consisting of a coefficient estimate and the confidence interval
+
+<ul>
+<li>If the confidence level is <code>1-alpha</code>, you can get the appropriate standard normal quantile using <code>qnorm(1-alpha)</code></li>
+</ul></li>
+</ol>
+
+<p>Hints on pressing <code>p</code>.</p>
+
+
+  </article>
+  <!-- Presenter Notes -->
+  <aside class="note">
+    <section>
+      <pre><code class="r">
+conf.int &lt;- function(mod, conf.level = 0.95) {
+    summ &lt;- summary(mod)
+    q.alpha &lt;- qnorm(conf.level)
+    output &lt;- data.frame(Estimate = summ[, 1], LCB = summ[, 1] - q.alpha * summ[, 
+        2])
+    return(output)
+}
+</code></pre>
+
+    </section>
+  </aside>
+</slide>
+
+      <slide class="" id="slide-5" style="background:;">
+  <hgroup>
+    
+  </hgroup>
+  <article>
+    
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+    <slide class="backdrop"></slide>
+  </slides>
+
+  <!--[if IE]>
+    <script 
+      src="http://ajax.googleapis.com/ajax/libs/chrome-frame/1/CFInstall.min.js">  
+    </script>
+    <script>CFInstall.check({mode: 'overlay'});</script>
+  <![endif]-->
+</body>
+<!-- Grab CDN jQuery, fall back to local if offline -->
+<script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.7.min.js"></script>
+<script>window.jQuery || document.write('<script src="libraries/widgets/quiz/js/jquery-1.7.min.js"><\/script>')</script>
+<!-- Load Javascripts for Widgets -->
+<!-- LOAD HIGHLIGHTER JS FILES -->
+<script src="libraries/highlighters/highlight.js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+<!-- DONE LOADING HIGHLIGHTER JS FILES -->
+</html>
