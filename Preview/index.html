@@ -18,7 +18,8 @@
     src="libraries/frameworks/io2012/js/require-1.0.8.min.js">
   </script>
   
-    <link rel="stylesheet" href = "assets/css/ribbons.css">
+    <link rel="stylesheet" href = "assets/css/custom.css">
+<link rel="stylesheet" href = "assets/css/ribbons.css">
 
 </head>
 <body style="opacity: 0">
@@ -173,10 +174,367 @@ conf.int &lt;- function(mod, conf.level = 0.95) {
 
       <slide class="segue dark" id="slide-5" style="background:;">
   <hgroup>
-    
+    <h2>Generalized linear models</h2>
   </hgroup>
   <article>
     
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+      <slide class="" id="slide-6" style="background:;">
+  <hgroup>
+    <h2>A quick review</h2>
+  </hgroup>
+  <article>
+    <p>Generalized linear models are extensions of linear models, that are based on the exponential
+family of distributions. They are characterized by three components:</p>
+
+<ul>
+<li>A distribution (normal/Gaussian, exponential, binomial, Poisson, Weibull, and so on)</li>
+<li>A linear predictor \(\eta = X\beta\)</li>
+<li>A <em>link function</em> relating the expected outcome to the predictor: \(E(Y) = \mu = g^{-1}(\eta)\). There are standard or &quot;natural&quot; links for different distributions, giving rise to familiar models</li>
+</ul>
+
+<p>This framework includes several classical models:</p>
+
+<ol>
+<li>Ordinary least squares / linear regression</li>
+<li>Logistic regression (Note, probit and tobit regressions involve changing the link, but in the same framework)</li>
+<li>Poisson regression / log-linear models</li>
+<li>Weibull regression</li>
+</ol>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+      <slide class="" id="slide-7" style="background:;">
+  <hgroup>
+    <h2>GLMs in R</h2>
+  </hgroup>
+  <article>
+    <p>R provides a function <code>glm</code> which performs generalized linear regression.</p>
+
+<pre><code>## function (formula, family = gaussian, data, weights, subset, 
+##     na.action, start = NULL, etastart, mustart, offset, control = list(...), 
+##     model = TRUE, method = &quot;glm.fit&quot;, x = FALSE, y = TRUE, contrasts = NULL, 
+##     ...) 
+## NULL
+</code></pre>
+
+<p>The arguments you will need often are <code>formula</code>, <code>family</code>, <code>data</code>, <code>subset</code> and <code>na.action</code>. The rest give finer control over the fitting algorithm.</p>
+
+<p>Details of the different arguments, as well as different components of the model object that is created, can be found by <code>help(glm)</code>.</p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+      <slide class="" id="slide-8" style="background:;">
+  <hgroup>
+    <h2>GLMs in R</h2>
+  </hgroup>
+  <article>
+    <p>The <code>family</code> argument takes either a family function or the name of the family function (which uses the default link). The following families and default links are included. Note that these families reflect the distribution of the <strong>dependent variable</strong></p>
+
+<table><thead>
+<tr>
+<th>Distribution</th>
+<th>Family function</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>Binomial</td>
+<td><code>binomial(link=&#39;logit&#39;)</code></td>
+</tr>
+<tr>
+<td>Normal</td>
+<td><code>gaussian(link=&#39;logit&#39;)</code></td>
+</tr>
+<tr>
+<td>Gamma</td>
+<td><code>Gamma(link=&#39;inverse&#39;)</code></td>
+</tr>
+<tr>
+<td>Inverse Gaussian</td>
+<td><code>inverse.gaussian(link=&quot;1/mu^2&quot;)</code></td>
+</tr>
+<tr>
+<td>Poisson</td>
+<td><code>poisson(link=&#39;log&#39;)</code></td>
+</tr>
+</tbody></table>
+
+<p>For other available links, see <code>help(family)</code></p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+      <slide class="" id="slide-9" style="background:;">
+  <hgroup>
+    <h2>Example: Logistic regression</h2>
+  </hgroup>
+  <article>
+    <p>A logistic regression can be run using the following code:</p>
+
+<pre><code class="r">model1 &lt;- glm(case ~ spontaneous + induced, data = infert, family = binomial)
+summary(model1)$coef
+</code></pre>
+
+<pre><code>##             Estimate Std. Error z value  Pr(&gt;|z|)
+## (Intercept)  -1.7079     0.2677  -6.380 1.776e-10
+## spontaneous   1.1972     0.2116   5.657 1.543e-08
+## induced       0.4181     0.2056   2.033 4.201e-02
+</code></pre>
+
+<p>Here <code>case</code> is a numeric object taking values 0 and 1. You can also use a factor
+object with only two levels, such as &quot;yes&quot; and &quot;no&quot;. R will convert this to a 0-1 variable 
+for fitting.</p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+      <slide class="" id="slide-10" style="background:;">
+  <hgroup>
+    <h2>Example: Logistic regression</h2>
+  </hgroup>
+  <article>
+    <p>You can also do logistic regression if you have numbers of &quot;yes&quot;&#39;s and &quot;no&quot;&#39;s, 
+or number of cases and controls. In this situation, the response is a 2-column matrix 
+of the number of cases and number of controls</p>
+
+<pre><code class="r">data(esoph)
+model2 &lt;- glm(cbind(ncases, ncontrols) ~ agegp + tobgp * alcgp, data = esoph, 
+    family = binomial)
+</code></pre>
+
+<p>Note, in the code, <code>tobgp*alcgp</code> is shorthand for the main effects <em>and</em> the 2-way interaction between
+the variables. You could also write it separately as <code>tobgp + alcgp + tobgp:alcgp</code></p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+      <slide class="" id="slide-11" style="background:;">
+  <hgroup>
+    <h2>Diagnostic plots</h2>
+  </hgroup>
+  <article>
+    <p>Linear models and GLMs share the same set of diagnostic plots. I demonstrate using a linear model.</p>
+
+<pre><code class="r">data(mtcars)
+model3 &lt;- lm(mpg ~ wt + as.factor(cyl), data = mtcars)
+par(ask = T)  # This will ask you before changing the plot in the window
+plot(model3)
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+      <slide class="" id="slide-12" style="background:;">
+  <hgroup>
+    <h2>Preview</h2>
+  </hgroup>
+  <article>
+    <p>I will go into some detail about how to fit GLMs, run several examples with you, and show how to easily extract the results to paste into your Word document or Powerpoint presentation</p>
+
+<blockquote>
+<p>Two packages I will heavily use for reporting are <code>knitr</code> and <code>pander</code>. Please make
+sure they are installed on your computer. These will make life much easier. Also, please
+install Pandoc from <a href="http://johnmacfarlane.net/pandoc">here</a></p>
+</blockquote>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+      <slide class="segue dark" id="slide-13" style="background:;">
+  <hgroup>
+    <h2>Predictive modeling</h2>
+  </hgroup>
+  <article>
+    
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+      <slide class="" id="slide-14" style="background:;">
+  <hgroup>
+    <h2>Main concepts</h2>
+  </hgroup>
+  <article>
+    <ul>
+<li>Splitting the data into training and test sets</li>
+<li>Evaluating model performance</li>
+<li>Using rich R resources to run different predictive models</li>
+</ul>
+
+<blockquote>
+<p>The main packages I will use here are <code>caret</code>, <code>AppliedPredictiveModeling</code>, <code>randomForest</code>, 
+<code>ipred</code>, <code>elasticnet</code>, <code>gbm</code>. Please have them installed on your machine.</p>
+</blockquote>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+      <slide class="" id="slide-15" style="background:;">
+  <hgroup>
+    <h2>Splitting data</h2>
+  </hgroup>
+  <article>
+    <p>The basic idea is to train the model on one data set and then test its performance on another. If you
+test it on the same data set you trained on, the performance will be over-optimistic and you will 
+almost certainly be overfitting. We will talk about single training-test split, as well as <em>k</em>-fold crossvalidation. This step is the crux of getting good predictive models tuned. </p>
+
+<p>Our workhorses will be <code>AppliedPredictiveModeling::createDataPartition</code> and <code>caret::createFolds</code> (the nomenclature here is <code>package::function</code>)</p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+      <slide class="" id="slide-16" style="background:;">
+  <hgroup>
+    <h2>Evaluating models</h2>
+  </hgroup>
+  <article>
+    <p>For continuous outcomes, we will often use RMSE (root mean square error). </p>
+
+<p>For categorical outcomes, the confusion matrix is often used. I will also talk about ROC curves,
+calibration, equivocal predictions and Brier scores as a preferred metric for performance evaluation.</p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+      <slide class="" id="slide-17" style="background:;">
+  <hgroup>
+    <h2>Modeling</h2>
+  </hgroup>
+  <article>
+    <p>We will survey a few types of models:</p>
+
+<ul>
+<li>Logistic regression</li>
+<li>Decision trees</li>
+<li>Random Forest</li>
+<li>Boosted trees</li>
+<li>Ridge regression and other penalized regression</li>
+<li>Bagging predictors</li>
+</ul>
+
+<p>A cursory (Wikipedia) look at these methods would be good before Friday</p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+      <slide class="segue dark" id="slide-18" style="background:;">
+  <hgroup>
+    <h2>Simulation</h2>
+  </hgroup>
+  <article>
+    
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+      <slide class="" id="slide-19" style="background:;">
+  <hgroup>
+    <h2>Random number generation</h2>
+  </hgroup>
+  <article>
+    <ul>
+<li>R has random number generators for several distributions, including normal, binomial, beta, chi-squared,
+Gamma, exponential, F, geometric, multinomial and others. For a full list see <code>help(Distributions)</code></li>
+<li>R has also several RNG kinds available. The default is &quot;Mersenne-Twister&quot;. See <code>help(RNG)</code> for other options.</li>
+<li>The typical random number generation function has the template <code>r{distribution}</code>, so
+
+<ul>
+<li><code>rnorm</code> (Normal)</li>
+<li><code>rbinom</code> (Binomial)</li>
+<li><code>rexp</code> (Exponential)</li>
+<li><code>rpois</code> (Poisson)</li>
+<li><code>rf</code> (F)</li>
+<li><code>rgamma</code> (Gamma)</li>
+</ul></li>
+</ul>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+      <slide class="" id="slide-20" style="background:;">
+  <hgroup>
+    <h2>Random number generation</h2>
+  </hgroup>
+  <article>
+    <pre><code class="r">library(ggplot2)
+x &lt;- rnorm(1000)
+qplot(x)
+</code></pre>
+
+<p><img src="figure/fig1.png" alt="plot of chunk fig1"> </p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+      <slide class="" id="slide-21" style="background:;">
+  <hgroup>
+    <h2>Random number generation</h2>
+  </hgroup>
+  <article>
+    <pre><code class="r">library(ggplot2)
+y &lt;- rexp(1000)
+qplot(y, geom = &quot;density&quot;)
+</code></pre>
+
+<p><img src="figure/fig2.png" alt="plot of chunk fig2"> </p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+      <slide class="" id="slide-22" style="background:;">
+  <hgroup>
+    <h2>DES / Microsimulation</h2>
+  </hgroup>
+  <article>
+    <p>R does not have dedicated packages for DES, but all the components you need can
+be done in R. This makes sense, since all simulation schema are different, and it is a 
+matter of mixing and matching the components. Following Nance (1993) and (1995), a 
+DES programming language must have the following:</p>
+
+<ul>
+<li>generation of random numbers to represent uncertainty</li>
+<li>process transformers, to allow non-uniform randomness to be generated</li>
+<li>list processing, so objects can be created, manipulated and deleted</li>
+<li>statistical analysis routines</li>
+<li>report generation</li>
+<li>a time flow mechanism</li>
+</ul>
+
+<p>R satisfies these. I will work through a simple example of a M/M/1 queue to show
+how a DES can be programmed in R.</p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+      <slide class="" id="slide-23" style="background:;">
+  <hgroup>
+    <h2>DES / Microsimulation</h2>
+  </hgroup>
+  <article>
+    <p>There is one, rather simplistic, general microsimulation package in R, <a href="http://code.google.com/p/simario">simario</a>. There is also a package, <code>sms</code> for spatial microsimulation, available on CRAN. </p>
+
+<p>A nice presentation on microsimulation in R is available <a href="docs/clements-srug-2012.pdf">here</a></p>
+
   </article>
   <!-- Presenter Notes -->
 </slide>
@@ -195,6 +553,20 @@ conf.int &lt;- function(mod, conf.level = 0.95) {
 <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.7.min.js"></script>
 <script>window.jQuery || document.write('<script src="libraries/widgets/quiz/js/jquery-1.7.min.js"><\/script>')</script>
 <!-- Load Javascripts for Widgets -->
+<!-- MathJax: Fall back to local if CDN offline but local image fonts are not supported (saves >100MB) -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [['$','$'], ['\\(','\\)']],
+      processEscapes: true
+    }
+  });
+</script>
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/2.0-latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<!-- <script src="https://c328740.ssl.cf1.rackcdn.com/mathjax/2.0-latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script> -->
+<script>window.MathJax || document.write('<script type="text/x-mathjax-config">MathJax.Hub.Config({"HTML-CSS":{imageFont:null}});<\/script><script src="libraries/widgets/mathjax/MathJax.js?config=TeX-AMS-MML_HTMLorMML"><\/script>')
+</script>
 <!-- LOAD HIGHLIGHTER JS FILES -->
 <script src="libraries/highlighters/highlight.js/highlight.pack.js"></script>
 <script>hljs.initHighlightingOnLoad();</script>
