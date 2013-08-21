@@ -5,7 +5,7 @@ author      : Abhijit Dasgupta
 job         : ARAASTAT
 framework   : io2012        # {io2012, html5slides, shower, dzslides, ...}
 highlighter : highlight.js  # {highlight.js, prettify, highlight}
-hitheme     : tomorrow      # 
+hitheme     : solarized-dark      # 
 widgets     : mathjax           # {mathjax, quiz, bootstrap}
 mode        : selfcontained # {standalone, draft}
 license : by-nc-nd
