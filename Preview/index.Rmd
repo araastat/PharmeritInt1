@@ -84,7 +84,7 @@ functionName <- function(arg1, arg2,){
 }
 ```
 
-4. Write a function that takes as input the result of a linear regression and the confidence level and outputs a data.frame with each row consisting of a coefficient estimate and the confidence interval
++ Write a function that takes as input the result of a linear regression and the confidence level and outputs a data.frame with each row consisting of a coefficient estimate and the confidence interval
   - If the confidence level is `1-alpha`, you can get the appropriate standard normal quantile using `qnorm(1-alpha)`
 
 Hints on pressing `p`.
