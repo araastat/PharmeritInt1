@@ -161,6 +161,17 @@ data.frame("GBM"=extract.auc(pred5), "RF"=extract.auc(pred6))
 
 
 
+library(caret)
+bmodel <- train(classes~., data=twocl.train, method='gbm', 
+                tuneLength=10,
+                trControl=trainControl(method='cv',number=5))
+library(rpart)
+bmodel2 <- train(classes~., data=twocl.train, method='rpart',
+                 tuneLength=10, 
+                 trControl=trainControl(method='cv',number=5))
+
+
+
 t.end   <- 10^5 # duration of sim
 t.clock <- 0    # sim time
 Ta <- 1.3333    # interarrival period

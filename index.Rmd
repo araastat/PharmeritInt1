@@ -349,6 +349,20 @@ extract.auc <- function(pred){
 data.frame("GBM"=extract.auc(pred5), "RF"=extract.auc(pred6))
 ```
 
+---
+## Choosing the best model
+
+```{r}
+library(caret)
+bmodel <- train(classes~., data=twocl.train, method='gbm', 
+                tuneLength=10,
+                trControl=trainControl(method='cv',number=5))
+library(rpart)
+bmodel2 <- train(classes~., data=twocl.train, method='rpart',
+                 tuneLength=10, 
+                 trControl=trainControl(method='cv',number=5))
+```
+
 ---.segue .dark
 
 ## Discrete event simulation

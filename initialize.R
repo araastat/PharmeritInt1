@@ -11,7 +11,7 @@ cran.packages <- c("reshape2","plyr","ggplot2","Hmisc","rms", "knitr",
                    "sqldf",'RSQLite', 'pander', 'gdata',
                    'AppliedPredictiveModeling',
                    'ROCR',
-                   'randomForest','gbm')
+                   'randomForest','gbm','rpart')
 
 to.install <- setdiff(cran.packages, have.packages[,1])
 if(length(to.install)>0) install.packages(to.install)
