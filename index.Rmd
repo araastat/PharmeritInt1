@@ -198,4 +198,10 @@ print(xtable(model4), type='html')
 
 ## Predictive modeling
 
----
+--- .segue .dark
+
+## Thank you
+
+```{r, echo=FALSE, results='hide', message=FALSE}
+purl('index.Rmd',output='code.R', documentation=0L)
+```
