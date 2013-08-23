@@ -205,7 +205,7 @@ as.factor(gear)5  2.168943    2.37790  0.912124 3.712e-01
 ```
 
 <!-- html table generated in R 3.0.1 by xtable 1.7-1 package -->
-<!-- Fri Aug 23 12:30:16 2013 -->
+<!-- Fri Aug 23 12:31:21 2013 -->
 <TABLE border=1>
 <TR> <TH>  </TH> <TH> Estimate </TH> <TH> Std. Error </TH> <TH> t value </TH> <TH> Pr(&gt |t|) </TH>  </TR>
   <TR> <TD align="right"> (Intercept) </TD> <TD align="right"> 34.5882 </TD> <TD align="right"> 7.3448 </TD> <TD align="right"> 4.71 </TD> <TD align="right"> 0.0001 </TD> </TR>
@@ -377,7 +377,7 @@ Coefficients are interpreted as log-ratios.
 ```
 
 <!-- html table generated in R 3.0.1 by xtable 1.7-1 package -->
-<!-- Fri Aug 23 12:30:17 2013 -->
+<!-- Fri Aug 23 12:31:22 2013 -->
 <TABLE border=1>
 <TR> <TH>  </TH> <TH> Estimate </TH> <TH> Std. Error </TH> <TH> z value </TH> <TH> Pr(&gt |z|) </TH>  </TR>
   <TR> <TD align="right"> (Intercept) </TD> <TD align="right"> 3.0445 </TD> <TD align="right"> 0.1709 </TD> <TD align="right"> 17.81 </TD> <TD align="right"> 0.0000 </TD> </TR>

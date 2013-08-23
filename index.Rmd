@@ -352,7 +352,7 @@ data.frame("GBM"=extract.auc(pred5), "RF"=extract.auc(pred6))
 ---
 ## Choosing the best model
 
-```{r, results='hide'}
+```{r, results='hide', message=FALSE, warning=FALSE}
 library(caret)
 bmodel <- train(classes~., data=twocl.train, method='gbm', 
                 tuneLength=10,
