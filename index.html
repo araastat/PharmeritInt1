@@ -262,7 +262,7 @@ as.factor(gear)5  2.168943    2.37790  0.912124 3.712e-01
 
 <!-- html table generated in R 3.0.1 by xtable 1.7-1 package -->
 
-<!-- Fri Aug 23 12:14:05 2013 -->
+<!-- Fri Aug 23 12:21:32 2013 -->
 
 <TABLE border=1>
 <TR> <TH>  </TH> <TH> Estimate </TH> <TH> Std. Error </TH> <TH> t value </TH> <TH> Pr(&gt |t|) </TH>  </TR>
@@ -457,7 +457,7 @@ treatment3   1.421e-15     0.2000  7.105e-15 1.000e+00
 
 <!-- html table generated in R 3.0.1 by xtable 1.7-1 package -->
 
-<!-- Fri Aug 23 12:14:05 2013 -->
+<!-- Fri Aug 23 12:21:32 2013 -->
 
 <TABLE border=1>
 <TR> <TH>  </TH> <TH> Estimate </TH> <TH> Std. Error </TH> <TH> z value </TH> <TH> Pr(&gt |z|) </TH>  </TR>
@@ -558,9 +558,16 @@ treatment3   1.421e-15     0.2000  7.105e-15 1.000e+00
 &gt; mtcars.test &lt;- mtcars[-indx.train, ]
 </code></pre>
 
-<h2>Random Forests</h2>
+  </article>
+  <!-- Presenter Notes -->
+</slide>
 
-<pre><code class="r">&gt; require(randomForest)
+      <slide class="" id="slide-22" style="background:;">
+  <hgroup>
+    <h2>Random Forests</h2>
+  </hgroup>
+  <article>
+    <pre><code class="r">&gt; require(randomForest)
 &gt; rf1 &lt;- randomForest(mpg ~ ., data = mtcars.train, importance = T)
 &gt; varImpPlot(rf1)
 </code></pre>
@@ -578,7 +585,7 @@ treatment3   1.421e-15     0.2000  7.105e-15 1.000e+00
   </aside>
 </slide>
 
-      <slide class="" id="slide-22" style="background:;">
+      <slide class="" id="slide-23" style="background:;">
   <hgroup>
     <h2>Random Forests</h2>
   </hgroup>
@@ -595,7 +602,7 @@ treatment3   1.421e-15     0.2000  7.105e-15 1.000e+00
   <!-- Presenter Notes -->
 </slide>
 
-      <slide class="" id="slide-23" style="background:;">
+      <slide class="" id="slide-24" style="background:;">
   <hgroup>
     <h2>Random Forests</h2>
   </hgroup>
@@ -617,7 +624,7 @@ treatment3   1.421e-15     0.2000  7.105e-15 1.000e+00
   </aside>
 </slide>
 
-      <slide class="" id="slide-24" style="background:;">
+      <slide class="" id="slide-25" style="background:;">
   <hgroup>
     <h2>Classification</h2>
   </hgroup>
@@ -641,7 +648,7 @@ treatment3   1.421e-15     0.2000  7.105e-15 1.000e+00
   <!-- Presenter Notes -->
 </slide>
 
-      <slide class="" id="slide-25" style="background:;">
+      <slide class="" id="slide-26" style="background:;">
   <hgroup>
     <h2>Classification</h2>
   </hgroup>
@@ -668,7 +675,7 @@ treatment3   1.421e-15     0.2000  7.105e-15 1.000e+00
   <!-- Presenter Notes -->
 </slide>
 
-      <slide class="" id="slide-26" style="background:;">
+      <slide class="" id="slide-27" style="background:;">
   <hgroup>
     <h2>Classification errors</h2>
   </hgroup>
@@ -688,7 +695,7 @@ treatment3   1.421e-15     0.2000  7.105e-15 1.000e+00
   <!-- Presenter Notes -->
 </slide>
 
-      <slide class="" id="slide-27" style="background:;">
+      <slide class="" id="slide-28" style="background:;">
   <hgroup>
     <h2>ROC curves</h2>
   </hgroup>
@@ -705,7 +712,7 @@ treatment3   1.421e-15     0.2000  7.105e-15 1.000e+00
   <!-- Presenter Notes -->
 </slide>
 
-      <slide class="" id="slide-28" style="background:;">
+      <slide class="" id="slide-29" style="background:;">
   <hgroup>
     <h2>ROC curves</h2>
   </hgroup>
@@ -722,7 +729,7 @@ treatment3   1.421e-15     0.2000  7.105e-15 1.000e+00
   <!-- Presenter Notes -->
 </slide>
 
-      <slide class="" id="slide-29" style="background:;">
+      <slide class="" id="slide-30" style="background:;">
   <hgroup>
     <h2>AUC</h2>
   </hgroup>
@@ -743,7 +750,7 @@ treatment3   1.421e-15     0.2000  7.105e-15 1.000e+00
   <!-- Presenter Notes -->
 </slide>
 
-      <slide class="segue dark" id="slide-30" style="background:;">
+      <slide class="segue dark" id="slide-31" style="background:;">
   <hgroup>
     <h2>Discrete event simulation</h2>
   </hgroup>
@@ -753,7 +760,7 @@ treatment3   1.421e-15     0.2000  7.105e-15 1.000e+00
   <!-- Presenter Notes -->
 </slide>
 
-      <slide class="" id="slide-31" style="background:;">
+      <slide class="" id="slide-32" style="background:;">
   <hgroup>
     <h2>The M/M/1 process</h2>
   </hgroup>
@@ -770,7 +777,7 @@ treatment3   1.421e-15     0.2000  7.105e-15 1.000e+00
   <!-- Presenter Notes -->
 </slide>
 
-      <slide class="" id="slide-32" style="background:;">
+      <slide class="" id="slide-33" style="background:;">
   <hgroup>
     <h2>Initialization</h2>
   </hgroup>
@@ -796,7 +803,7 @@ treatment3   1.421e-15     0.2000  7.105e-15 1.000e+00
   <!-- Presenter Notes -->
 </slide>
 
-      <slide class="" id="slide-33" style="background:;">
+      <slide class="" id="slide-34" style="background:;">
   <hgroup>
     <h2>Running the simulation</h2>
   </hgroup>
@@ -810,7 +817,7 @@ treatment3   1.421e-15     0.2000  7.105e-15 1.000e+00
   <!-- Presenter Notes -->
 </slide>
 
-      <slide class="" id="slide-34" style="background:;">
+      <slide class="" id="slide-35" style="background:;">
   <hgroup>
     <h2>Plotting a result</h2>
   </hgroup>
@@ -825,7 +832,7 @@ treatment3   1.421e-15     0.2000  7.105e-15 1.000e+00
   <!-- Presenter Notes -->
 </slide>
 
-      <slide class="segue dark" id="slide-35" style="background:;">
+      <slide class="segue dark" id="slide-36" style="background:;">
   <hgroup>
     <h2>Reporting to Microsoft Products</h2>
   </hgroup>
@@ -835,7 +842,7 @@ treatment3   1.421e-15     0.2000  7.105e-15 1.000e+00
   <!-- Presenter Notes -->
 </slide>
 
-      <slide class="" id="slide-36" style="background:;">
+      <slide class="" id="slide-37" style="background:;">
   <hgroup>
     <h2>Option 1</h2>
   </hgroup>
@@ -857,7 +864,7 @@ treatment3   1.421e-15     0.2000  7.105e-15 1.000e+00
   <!-- Presenter Notes -->
 </slide>
 
-      <slide class="" id="slide-37" style="background:;">
+      <slide class="" id="slide-38" style="background:;">
   <hgroup>
     <h2>Option 2 (cross-platform)</h2>
   </hgroup>
@@ -865,13 +872,12 @@ treatment3   1.421e-15     0.2000  7.105e-15 1.000e+00
     <p>Using pandoc and <code>pander</code> to create Word documents</p>
 
 <pre><code class="r">&gt; library(pander)
-&gt; myReport &lt;- Pandoc$new(&quot;Abhijit&quot;, &quot;demo&quot;)
-&gt; 
+&gt; myReport &lt;- pander::Pandoc$new(&quot;Abhijit&quot;, &quot;demo&quot;)
 &gt; myReport$add(model1)
 &gt; myReport$add(model4)
 &gt; myReport$add.paragraph(&quot;Now here&#39;s a plot!!&quot;)
 &gt; myReport$add(plot(perf6))
-&gt; myReport$format &lt;- &quot;docx&quot;
+&gt; myReport$format &lt;- &quot;html&quot;
 &gt; myReport$export(open = F)
 </code></pre>
 
@@ -879,7 +885,7 @@ treatment3   1.421e-15     0.2000  7.105e-15 1.000e+00
   <!-- Presenter Notes -->
 </slide>
 
-      <slide class="segue dark" id="slide-38" style="background:;">
+      <slide class="segue dark" id="slide-39" style="background:;">
   <hgroup>
     <h2>Thank you</h2>
   </hgroup>
@@ -889,7 +895,7 @@ treatment3   1.421e-15     0.2000  7.105e-15 1.000e+00
   <!-- Presenter Notes -->
 </slide>
 
-      <slide class="" id="slide-39" style="background:;">
+      <slide class="" id="slide-40" style="background:;">
   <hgroup>
     
   </hgroup>

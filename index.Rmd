@@ -243,6 +243,7 @@ mtcars.train <- mtcars[indx.train,]
 mtcars.test <- mtcars[-indx.train,]
 ```
 
+---
 ## Random Forests
 
 ```{r, out.height='400px'}
