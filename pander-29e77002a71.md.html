@@ -1,0 +1,177 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <meta name="author" content="demo" />
+  <title>Abhijit</title>
+  <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+      <![endif]-->
+  
+  <link rel="stylesheet" href="stylesheets/base.css" />
+  <link rel="stylesheet" href="stylesheets/skeleton.css" />
+  <link rel="stylesheet" href="stylesheets/layout.css" />
+  <link rel="stylesheet" href="stylesheets/fonts.css" />
+  <link rel="stylesheet" href="stylesheets/slimbox2.css" />
+  <link rel="stylesheet" href="stylesheets/custom.css" />
+  <link rel="stylesheet" href="stylesheets/caption.css"/>
+  
+  <link rel="shortcut icon" href="images/favicon.gif" />
+  <link rel="apple-touch-icon" href="images/apple-touch-icon.png" />
+  <link rel="apple-touch-icon" sizes="72x72" href="images/apple-touch-icon-72x72.png" />
+  <link rel="apple-touch-icon" sizes="114x114" href="images/apple-touch-icon-114x114.png" />
+  
+  <script type="text/javascript" src="javascripts/jquery-1.7.2.min.js"></script>
+  <script type="text/javascript" src="javascripts/tabs.js"></script>  <!--remove-->
+  <script type="text/javascript" src="javascripts/custom.js"></script>
+  <script type="text/javascript" src="javascripts/slimbox2.js"></script>
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+    tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}
+    });
+  </script>
+  <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"></script>
+  <script type="text/javascript" src="javascripts/jcaption.min.js" /></script>
+</head>
+<body>
+<div id="header">
+<h1 class="title">Abhijit</h1>
+<h2 class="author">demo</h2>
+<h3 class="date">Fri Aug 23 12:17:36 2013</h3>
+</div>
+<table>
+<caption>Fitting linear model: mpg ~ disp + hp + drat + wt + as.factor(cyl) + as.factor(gear)</caption>
+<thead>
+<tr class="header">
+<th align="center"> </th>
+<th align="center">Estimate</th>
+<th align="center">Std. Error</th>
+<th align="center">t value</th>
+<th align="center">Pr(&gt;|t|)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="center"><strong>(Intercept)</strong></td>
+<td align="center">34.59</td>
+<td align="center">7.345</td>
+<td align="center">4.709</td>
+<td align="center">9.609e-05</td>
+</tr>
+<tr class="even">
+<td align="center"><strong>disp</strong></td>
+<td align="center">0.008195</td>
+<td align="center">0.01446</td>
+<td align="center">0.5666</td>
+<td align="center">0.5765</td>
+</tr>
+<tr class="odd">
+<td align="center"><strong>hp</strong></td>
+<td align="center">-0.0349</td>
+<td align="center">0.01866</td>
+<td align="center">-1.87</td>
+<td align="center">0.07421</td>
+</tr>
+<tr class="even">
+<td align="center"><strong>drat</strong></td>
+<td align="center">-0.01774</td>
+<td align="center">1.846</td>
+<td align="center">-0.009611</td>
+<td align="center">0.9924</td>
+</tr>
+<tr class="odd">
+<td align="center"><strong>wt</strong></td>
+<td align="center">-3.279</td>
+<td align="center">1.309</td>
+<td align="center">-2.505</td>
+<td align="center">0.01979</td>
+</tr>
+<tr class="even">
+<td align="center"><strong>as.factor(cyl)6</strong></td>
+<td align="center">-3.104</td>
+<td align="center">1.653</td>
+<td align="center">-1.878</td>
+<td align="center">0.07318</td>
+</tr>
+<tr class="odd">
+<td align="center"><strong>as.factor(cyl)8</strong></td>
+<td align="center">-2.221</td>
+<td align="center">3.34</td>
+<td align="center">-0.6649</td>
+<td align="center">0.5127</td>
+</tr>
+<tr class="even">
+<td align="center"><strong>as.factor(gear)4</strong></td>
+<td align="center">1.746</td>
+<td align="center">2.17</td>
+<td align="center">0.8046</td>
+<td align="center">0.4293</td>
+</tr>
+<tr class="odd">
+<td align="center"><strong>as.factor(gear)5</strong></td>
+<td align="center">2.169</td>
+<td align="center">2.378</td>
+<td align="center">0.9121</td>
+<td align="center">0.3712</td>
+</tr>
+</tbody>
+</table>
+<table>
+<caption>Fitting generalized (poisson/log) linear model: counts ~ outcome + treatment</caption>
+<thead>
+<tr class="header">
+<th align="center"> </th>
+<th align="center">Estimate</th>
+<th align="center">Std. Error</th>
+<th align="center">z value</th>
+<th align="center">Pr(&gt;|z|)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="center"><strong>(Intercept)</strong></td>
+<td align="center">3.045</td>
+<td align="center">0.1709</td>
+<td align="center">17.81</td>
+<td align="center">5.427e-71</td>
+</tr>
+<tr class="even">
+<td align="center"><strong>outcome2</strong></td>
+<td align="center">-0.4543</td>
+<td align="center">0.2022</td>
+<td align="center">-2.247</td>
+<td align="center">0.02465</td>
+</tr>
+<tr class="odd">
+<td align="center"><strong>outcome3</strong></td>
+<td align="center">-0.293</td>
+<td align="center">0.1927</td>
+<td align="center">-1.52</td>
+<td align="center">0.1285</td>
+</tr>
+<tr class="even">
+<td align="center"><strong>treatment2</strong></td>
+<td align="center">1.338e-15</td>
+<td align="center">0.2</td>
+<td align="center">6.69e-15</td>
+<td align="center">1</td>
+</tr>
+<tr class="odd">
+<td align="center"><strong>treatment3</strong></td>
+<td align="center">1.421e-15</td>
+<td align="center">0.2</td>
+<td align="center">7.105e-15</td>
+<td align="center">1</td>
+</tr>
+</tbody>
+</table>
+<p>Now here's a plot!! <img src="plots/29e7b5706cf.png" /></p>
+<hr />
+<p>This report was generated with <a href="http://www.r-project.org/">R</a> (3.0.1) and <a href="https://github.com/rapporter/pander">pander</a> (0.3.7) in 0.624 sec on x86_64-apple-darwin10.8.0 platform.</p>
+<p align="center">
+  Design: <a href="http://rapport-package.info/"><i>rapport</i> Development Team</a> &copy; 2012 | Backend: <a href="https://github.com/rapporter/pander">pander</a> | License: <a href="http://www.gnu.org/licenses/agpl.html" target="_blank">AGPL3</a> | Styled with <a href="http://www.getskeleton.com/" target="_blank">skeleton</a>
+</p>
+</body>
+</html>

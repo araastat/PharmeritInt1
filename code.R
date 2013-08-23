@@ -191,6 +191,26 @@ source('rundes.R')
 
 
 
+library(R2wd)
+wdGet() # Opens new Word doc if not already open
+wdTable(format(head(mtcars)))
+wdPlot(rnorm(100), plotfun = plot, height = 10, width =20, pointsize = 20)
+
+
+
+
+library(pander)
+myReport <- Pandoc$new('Abhijit','demo')
+
+myReport$add(model1)
+myReport$add(model4)
+myReport$add.paragraph("Now here's a plot!!")
+myReport$add(plot(perf6))
+myReport$format <- 'docx'
+myReport$export(open=F)
+
+
+
 purl('index.Rmd',output='code.R', documentation=0L)
 
 

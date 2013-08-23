@@ -205,7 +205,7 @@ as.factor(gear)5  2.168943    2.37790  0.912124 3.712e-01
 ```
 
 <!-- html table generated in R 3.0.1 by xtable 1.7-1 package -->
-<!-- Fri Aug 23 11:46:24 2013 -->
+<!-- Fri Aug 23 12:14:05 2013 -->
 <TABLE border=1>
 <TR> <TH>  </TH> <TH> Estimate </TH> <TH> Std. Error </TH> <TH> t value </TH> <TH> Pr(&gt |t|) </TH>  </TR>
   <TR> <TD align="right"> (Intercept) </TD> <TD align="right"> 34.5882 </TD> <TD align="right"> 7.3448 </TD> <TD align="right"> 4.71 </TD> <TD align="right"> 0.0001 </TD> </TR>
@@ -377,7 +377,7 @@ Coefficients are interpreted as log-ratios.
 ```
 
 <!-- html table generated in R 3.0.1 by xtable 1.7-1 package -->
-<!-- Fri Aug 23 11:46:24 2013 -->
+<!-- Fri Aug 23 12:14:05 2013 -->
 <TABLE border=1>
 <TR> <TH>  </TH> <TH> Estimate </TH> <TH> Std. Error </TH> <TH> z value </TH> <TH> Pr(&gt |z|) </TH>  </TR>
   <TR> <TD align="right"> (Intercept) </TD> <TD align="right"> 3.0445 </TD> <TD align="right"> 0.1709 </TD> <TD align="right"> 17.81 </TD> <TD align="right"> 0.0000 </TD> </TR>
@@ -659,6 +659,51 @@ The code is [here](rundes.R)
 +     main = "M/M/1 simulation")
 ```
 <img src="figure/unnamed-chunk-31.png" title="plot of chunk unnamed-chunk-31" alt="plot of chunk unnamed-chunk-31" height="400px" />
+
+
+---.segue .dark
+
+## Reporting to Microsoft Products
+
+---
+
+## Option 1
+
+This option uses a Windows-only package called `R2wd`, which uses the DCOM service on Microsoft operating systems
+
+__This may be a security risk__. Don't know
+
+
+```r
+> library(R2wd)
+> wdGet()  # Opens new Word doc if not already open
+> wdTable(format(head(mtcars)))
+> wdPlot(rnorm(100), plotfun = plot, height = 10, width = 20, pointsize = 20)
+> 
+```
+
+
+See [this page](http://www.r-statistics.com/2010/05/exporting-r-output-to-ms-word-with-r2wd-an-example-session/) for a worked out example. 
+
+---
+
+## Option 2 (cross-platform)
+
+Using pandoc and `pander` to create Word documents
+
+
+```r
+> library(pander)
+> myReport <- Pandoc$new("Abhijit", "demo")
+> 
+> myReport$add(model1)
+> myReport$add(model4)
+> myReport$add.paragraph("Now here's a plot!!")
+> myReport$add(plot(perf6))
+> myReport$format <- "docx"
+> myReport$export(open = F)
+```
+
 
 
 ---.segue .dark
