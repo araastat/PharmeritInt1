@@ -1,0 +1,201 @@
+---
+title       : Intermediate R Part I
+subtitle    : Pharmerit, LLC
+author      : Abhijit Dasgupta
+job         : ARAASTAT
+github:
+  user: araastat
+  repo : PharmeritInt1
+  branch: "master"
+framework   : io2012        # {io2012, html5slides, shower, dzslides, ...}
+highlighter : highlight.js  # {highlight.js, prettify, highlight}
+hitheme : solarized-light
+widgets     : mathjax       # {mathjax, quiz, bootstrap}
+mode        : selfcontained # {standalone, draft}
+logo : Rlogo-1.png
+license : by-nc-nd
+--- .segue .dark
+
+## Generalized linear models
+```{r, results='hide',echo=FALSE}
+opts_chunk$set(comment=NA, prompt=TRUE)
+
+```
+
+
+---
+
+## A quick review of GLMs
+
+Generalized linear models are extensions of linear models, that are based on the exponential
+family of distributions. They are characterized by three components:
+
++ A distribution (normal/Gaussian, exponential, binomial, Poisson, Weibull, and so on)
++ A linear predictor $\eta = X\beta$
++ A _link function_ relating the expected outcome to the predictor: $E(Y) = \mu = g^{-1}(\eta)$. There are standard or "natural" links for different distributions, giving rise to familiar models
+
+This framework includes several classical models:
+
+1. Ordinary least squares / linear regression
+2. Logistic regression (Note, probit and tobit regressions involve changing the link, but in the same framework)
+3. Poisson regression / log-linear models
+4. Weibull regression
+
+---
+
+## Linear regression
+
+We want to model a structure
+$$
+y = \beta_0 + \beta_1 x_1 + \beta_2 x_2 + \beta_3 x_3 + \varepsilon
+$$
+from data, estimate the coefficients $\beta$, obtain their standard errors, and
+perform statistical inference (hypothesis testing, confidence intervals)
+
+---
+
+## Linear regression
+
+```{r LinearRegression1, eval=TRUE}
+data(mtcars)
+model1 <- lm(mpg ~ disp + hp + drat + wt + as.factor(cyl) + as.factor(gear),
+             data = mtcars)
+```
+```{r, echo=FALSE}
+model1
+```
+
+---
+
+## Linear regression
+
+Arguments:
+```{r}
+args(lm)
+```
+
+Results
+```{r}
+names(model1)
+```
+
+---
+
+## Linear regression
+
+```{r, results='hide'}
+summ1 <- summary(model1)
+```
+```{r, echo=FALSE}
+summ1
+```
+
+---
+
+## Linear regression
+
+```{r}
+summ1$coef
+```
+```{r}
+class(summ1$coef)
+```
+
+---
+
+## Linear regression
+```{r, out.height='450px'}
+par(mfrow=c(2,2)) # Arrange in 2x2 grid
+plot(model1)
+```
+
+---
+## Linear regression
+
+
+```{r, results='asis'}
+require(xtable)
+print(xtable(model1), type='html')
+```
+
+---
+
+## Generalized linear models
+
+The way you do GLM's in R is basically the same as doing linear regression.
+
+You just have to specify a distribution and link.
+
+What you specify is a `family`, i.e., a family of distributions, with a link specification.
+
+---
+
+## Logistic regression
+
+Logistic regression can be run if the outcome _Y_ is either a __binary__ or a 
+__binomial__ variable.
+
+```{r}
+data(infert)
+model2 <- glm(case~spontaneous + induced, data=infert, family=binomial())
+model2
+```
+
+---
+
+## Logistic regression
+
+```{r}
+summary(model2)$coef
+```
+Coefficients are interpreted as log-odds ratios.
+
+---
+
+## Logistic regression
+
+If you data is binomial rather than binary, specify number of successes and failures as the outcome
+
+```{r}
+for(i in 1:3) esoph[,i] <- as.factor(as.character(esoph[,i]))
+model3 <- glm(cbind(ncases, ncontrols) ~ agegp + tobgp * alcgp, data=esoph,
+              family=binomial())
+model3
+```
+
+*** pnotes
+
+
+`tobgp * alcgp` is the same as `tobgp + alcgp + tobgp:alcgp`, i.e., main effects 
+ and multiplicative interaction
+
+---
+## Poisson regression
+
+```{r}
+counts <- c(18,17,15,20,10,20,25,13,12)
+outcome <- gl(3,1,9)
+treatment <- gl(3,3)
+d.AD <- data.frame(treatment, outcome, counts)
+model4 <- glm(counts ~ outcome + treatment, family = poisson())
+model4
+```
+
+---
+## Poisson regression
+```{r}
+summary(model4)$coef
+```
+Coefficients are interpreted as log-ratios.
+
+---
+## Poisson regression
+```{r, results='asis'}
+print(xtable(model4), type='html')
+```
+
+--- .segue .dark
+
+## Predictive modeling
+
+---
