@@ -83,6 +83,24 @@ print(xtable(model4), type='html')
 
 
 
+require(randomForest)
+rf1 <- randomForest(mpg~., data=mtcars, importance=T)
+varImpPlot(rf1)
+
+
+
+library(ggplot2)
+p1 <- predict(rf1)
+qplot(mtcars$mpg, p1, xlab='True', ylab='predicted')+
+  geom_abline(color='red') +
+  geom_smooth()
+
+
+
+sqrt(mean((mtcars$mpg - p1)^2))
+
+
+
 purl('index.Rmd',output='code.R', documentation=0L)
 
 

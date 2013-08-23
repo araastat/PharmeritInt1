@@ -10,7 +10,7 @@ github:
 framework   : io2012        # {io2012, html5slides, shower, dzslides, ...}
 highlighter : highlight.js  # {highlight.js, prettify, highlight}
 hitheme : solarized-light
-widgets     : mathjax       # {mathjax, quiz, bootstrap}
+widgets     : [mathjax, bootstrap]      # {mathjax, quiz, bootstrap}
 mode        : selfcontained # {standalone, draft}
 logo : Rlogo-1.png
 license : by-nc-nd
@@ -205,7 +205,7 @@ as.factor(gear)5  2.168943    2.37790  0.912124 3.712e-01
 ```
 
 <!-- html table generated in R 3.0.1 by xtable 1.7-1 package -->
-<!-- Fri Aug 23 07:20:59 2013 -->
+<!-- Fri Aug 23 08:48:17 2013 -->
 <TABLE border=1>
 <TR> <TH>  </TH> <TH> Estimate </TH> <TH> Std. Error </TH> <TH> t value </TH> <TH> Pr(&gt |t|) </TH>  </TR>
   <TR> <TD align="right"> (Intercept) </TD> <TD align="right"> 34.5882 </TD> <TD align="right"> 7.3448 </TD> <TD align="right"> 4.71 </TD> <TD align="right"> 0.0001 </TD> </TR>
@@ -377,7 +377,7 @@ Coefficients are interpreted as log-ratios.
 ```
 
 <!-- html table generated in R 3.0.1 by xtable 1.7-1 package -->
-<!-- Fri Aug 23 07:21:00 2013 -->
+<!-- Fri Aug 23 08:48:17 2013 -->
 <TABLE border=1>
 <TR> <TH>  </TH> <TH> Estimate </TH> <TH> Std. Error </TH> <TH> z value </TH> <TH> Pr(&gt |z|) </TH>  </TR>
   <TR> <TD align="right"> (Intercept) </TD> <TD align="right"> 3.0445 </TD> <TD align="right"> 0.1709 </TD> <TD align="right"> 17.81 </TD> <TD align="right"> 0.0000 </TD> </TR>
@@ -392,9 +392,96 @@ Coefficients are interpreted as log-ratios.
 
 ## Predictive modeling
 
---- .segue .dark
+---
+
+## Prediction vs interpretation
+
++ Predictive modeling is focused on getting the best possible prediction
++ Interpretation of the model is a secondary or even an ignored issue
++ Some interpretation is possible, using counterfactual arguments (Dasgupta, et al, _under review_)
+
+----
+## Predictive modeling
+
++ Since the emphasis is on prediction, we need to 
+  -  evaluate predictive performance rather than fit
+  - be aware of _overfitting_
+  - evaluate the model on a dataset other than where it is fitted and trained
+  
+
+---
+
+## Predictive modeling
+
++ The usual nomemclature defines two data sets
+  - Training set, where model is build
+  - Test set, where model performance is evaluated
+
++ This typically involves splitting the data into
+  + 2 random parts
+  + several (5 or 10) random parts for cross-validation
+  
++ What you report is the prediction error or some surrogate
+  + Root Mean Square Error (RMSE) for continuous outcomes
+  + Brier score, misclassification rate, AUC for categorical variables
+
+---
+
+## Random Forests
+
+
+```r
+> require(randomForest)
+> rf1 <- randomForest(mpg ~ ., data = mtcars, importance = T)
+> varImpPlot(rf1)
+```
+
+<img src="figure/unnamed-chunk-17.png" title="plot of chunk unnamed-chunk-17" alt="plot of chunk unnamed-chunk-17" height="400px" />
+
+
+*** pnotes
+
+`mpg ~ .` means `mpg` regressed on all other variables in the data.frame
+
+---
+## Random Forests
+
+
+```r
+> library(ggplot2)
+> p1 <- predict(rf1)
+> qplot(mtcars$mpg, p1, xlab = "True", ylab = "predicted") + geom_abline(color = "red") + 
++     geom_smooth()
+```
+
+<img src="figure/unnamed-chunk-18.png" title="plot of chunk unnamed-chunk-18" alt="plot of chunk unnamed-chunk-18" height="400px" />
+
+
+---
+## Random Forests
+
+### Compute the RMSE of this prediction
+
+*** pnotes
+
+
+```r
+> sqrt(mean((mtcars$mpg - p1)^2))
+```
+
+```
+[1] 2.409
+```
+
+
+---
+
+
+---.segue .dark
 
 ## Thank you
 
 
 
+
+---
