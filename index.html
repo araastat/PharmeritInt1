@@ -262,7 +262,7 @@ as.factor(gear)5  2.168943    2.37790  0.912124 3.712e-01
 
 <!-- html table generated in R 3.0.1 by xtable 1.7-1 package -->
 
-<!-- Fri Aug 23 08:48:17 2013 -->
+<!-- Fri Aug 23 11:46:24 2013 -->
 
 <TABLE border=1>
 <TR> <TH>  </TH> <TH> Estimate </TH> <TH> Std. Error </TH> <TH> t value </TH> <TH> Pr(&gt |t|) </TH>  </TR>
@@ -457,7 +457,7 @@ treatment3   1.421e-15     0.2000  7.105e-15 1.000e+00
 
 <!-- html table generated in R 3.0.1 by xtable 1.7-1 package -->
 
-<!-- Fri Aug 23 08:48:17 2013 -->
+<!-- Fri Aug 23 11:46:24 2013 -->
 
 <TABLE border=1>
 <TR> <TH>  </TH> <TH> Estimate </TH> <TH> Std. Error </TH> <TH> z value </TH> <TH> Pr(&gt |z|) </TH>  </TR>
@@ -548,15 +548,24 @@ treatment3   1.421e-15     0.2000  7.105e-15 1.000e+00
 
       <slide class="" id="slide-21" style="background:;">
   <hgroup>
-    <h2>Random Forests</h2>
+    <h2>Splitting data</h2>
   </hgroup>
   <article>
-    <pre><code class="r">&gt; require(randomForest)
-&gt; rf1 &lt;- randomForest(mpg ~ ., data = mtcars, importance = T)
+    <pre><code class="r">&gt; set.seed(135793)
+&gt; library(caret)
+&gt; indx.train &lt;- createDataPartition(y = 1:nrow(mtcars), p = 0.7, list = F)
+&gt; mtcars.train &lt;- mtcars[indx.train, ]
+&gt; mtcars.test &lt;- mtcars[-indx.train, ]
+</code></pre>
+
+<h2>Random Forests</h2>
+
+<pre><code class="r">&gt; require(randomForest)
+&gt; rf1 &lt;- randomForest(mpg ~ ., data = mtcars.train, importance = T)
 &gt; varImpPlot(rf1)
 </code></pre>
 
-<p><img src="figure/unnamed-chunk-17.png" title="plot of chunk unnamed-chunk-17" alt="plot of chunk unnamed-chunk-17" height="400px" /></p>
+<p><img src="figure/unnamed-chunk-18.png" title="plot of chunk unnamed-chunk-18" alt="plot of chunk unnamed-chunk-18" height="400px" /></p>
 
 
   </article>
@@ -575,12 +584,12 @@ treatment3   1.421e-15     0.2000  7.105e-15 1.000e+00
   </hgroup>
   <article>
     <pre><code class="r">&gt; library(ggplot2)
-&gt; p1 &lt;- predict(rf1)
-&gt; qplot(mtcars$mpg, p1, xlab = &quot;True&quot;, ylab = &quot;predicted&quot;) + geom_abline(color = &quot;red&quot;) + 
+&gt; p1 &lt;- predict(rf1, newdata = mtcars.test)
+&gt; qplot(mtcars.test$mpg, p1, xlab = &quot;True&quot;, ylab = &quot;predicted&quot;) + geom_abline(color = &quot;red&quot;) + 
 +     geom_smooth()
 </code></pre>
 
-<p><img src="figure/unnamed-chunk-18.png" title="plot of chunk unnamed-chunk-18" alt="plot of chunk unnamed-chunk-18" height="400px" /></p>
+<p><img src="figure/unnamed-chunk-19.png" title="plot of chunk unnamed-chunk-19" alt="plot of chunk unnamed-chunk-19" height="400px" /></p>
 
   </article>
   <!-- Presenter Notes -->
@@ -601,7 +610,7 @@ treatment3   1.421e-15     0.2000  7.105e-15 1.000e+00
       <pre><code class="r">&gt; sqrt(mean((mtcars$mpg - p1)^2))
 </code></pre>
 
-<pre><code>[1] 2.409
+<pre><code>[1] 8.931
 </code></pre>
 
     </section>
@@ -610,7 +619,133 @@ treatment3   1.421e-15     0.2000  7.105e-15 1.000e+00
 
       <slide class="" id="slide-24" style="background:;">
   <hgroup>
-    
+    <h2>Classification</h2>
+  </hgroup>
+  <article>
+    <pre><code class="r">&gt; library(AppliedPredictiveModeling)
+&gt; data(twoClassData, package = &quot;AppliedPredictiveModeling&quot;)
+&gt; twocl &lt;- cbind(classes, predictors)
+&gt; indx.train &lt;- createDataPartition(twocl$classes, p = 0.5, list = F)
+&gt; twocl.train &lt;- twocl[indx.train, ]
+&gt; twocl.test &lt;- twocl[-indx.train, ]
+&gt; str(twocl)
+</code></pre>
+
+<pre><code>&#39;data.frame&#39;:   208 obs. of  3 variables:
+ $ classes   : Factor w/ 2 levels &quot;Class1&quot;,&quot;Class2&quot;: 2 2 2 2 2 2 2 2 2 2 ...
+ $ PredictorA: num  0.158 0.655 0.706 0.199 0.395 ...
+ $ PredictorB: num  0.1609 0.4918 0.6333 0.0881 0.4152 ...
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+      <slide class="" id="slide-25" style="background:;">
+  <hgroup>
+    <h2>Classification</h2>
+  </hgroup>
+  <article>
+    <pre><code class="r">&gt; library(gbm)
+&gt; twocl.train &lt;- transform(twocl.train, classes1 = ifelse(classes == &quot;Class2&quot;, 
++     1, 0))
+&gt; twocl.test &lt;- transform(twocl.test, classes1 = ifelse(classes == &quot;Class2&quot;, 1, 
++     0))
+&gt; model5 &lt;- gbm(classes1 ~ ., data = twocl.train, n.trees = 1000, cv.folds = 5)
+</code></pre>
+
+<pre><code>Distribution not specified, assuming bernoulli ...
+</code></pre>
+
+<pre><code class="r">&gt; p5 &lt;- predict(model5, newdata = twocl.test, n.trees = 500, type = &quot;response&quot;)
+</code></pre>
+
+<pre><code class="r">&gt; model6 &lt;- randomForest(classes ~ ., data = twocl.train)
+&gt; p6 &lt;- predict(model6, newdata = twocl.test, type = &quot;prob&quot;)[, 2]
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+      <slide class="" id="slide-26" style="background:;">
+  <hgroup>
+    <h2>Classification errors</h2>
+  </hgroup>
+  <article>
+    <p>Misclassification</p>
+
+<pre><code class="r">&gt; misclas5 &lt;- mean((twocl.test$classes == &quot;Class2&quot;) != (p5 &gt; 0.5))
+&gt; misclas6 &lt;- mean(twocl.test$classes != predict(model6, newdata = twocl.test))
+&gt; data.frame(GBM = misclas5, RF = misclas6)
+</code></pre>
+
+<pre><code>  GBM RF
+1   0  0
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+      <slide class="" id="slide-27" style="background:;">
+  <hgroup>
+    <h2>ROC curves</h2>
+  </hgroup>
+  <article>
+    <pre><code class="r">&gt; library(ROCR)
+&gt; pred5 &lt;- prediction(p5, twocl.test$classes)
+&gt; perf5 &lt;- performance(pred5, &quot;tpr&quot;, &quot;fpr&quot;)
+&gt; plot(perf5)
+</code></pre>
+
+<p><img src="figure/unnamed-chunk-25.png" title="plot of chunk unnamed-chunk-25" alt="plot of chunk unnamed-chunk-25" height="400px" /></p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+      <slide class="" id="slide-28" style="background:;">
+  <hgroup>
+    <h2>ROC curves</h2>
+  </hgroup>
+  <article>
+    <pre><code class="r">&gt; library(ROCR)
+&gt; pred6 &lt;- prediction(p6, twocl.test$classes)
+&gt; perf6 &lt;- performance(pred6, &quot;tpr&quot;, &quot;fpr&quot;)
+&gt; plot(perf6)
+</code></pre>
+
+<p><img src="figure/unnamed-chunk-26.png" title="plot of chunk unnamed-chunk-26" alt="plot of chunk unnamed-chunk-26" height="400px" /></p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+      <slide class="" id="slide-29" style="background:;">
+  <hgroup>
+    <h2>AUC</h2>
+  </hgroup>
+  <article>
+    <pre><code class="r">&gt; extract.auc &lt;- function(pred) {
++     require(ROCR)
++     perf &lt;- performance(pred, &quot;auc&quot;)
++     paste(&quot;AUC =&quot;, perf@y.values)
++ }
+&gt; data.frame(GBM = extract.auc(pred5), RF = extract.auc(pred6))
+</code></pre>
+
+<pre><code>      GBM      RF
+1 AUC = 1 AUC = 1
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+      <slide class="segue dark" id="slide-30" style="background:;">
+  <hgroup>
+    <h2>Discrete event simulation</h2>
   </hgroup>
   <article>
     
@@ -618,7 +753,79 @@ treatment3   1.421e-15     0.2000  7.105e-15 1.000e+00
   <!-- Presenter Notes -->
 </slide>
 
-      <slide class="segue dark" id="slide-25" style="background:;">
+      <slide class="" id="slide-31" style="background:;">
+  <hgroup>
+    <h2>The M/M/1 process</h2>
+  </hgroup>
+  <article>
+    <p>The M/M/1 process has a single server who serves incoming clients. </p>
+
+<ol>
+<li>Clients come into the queue according to a Poisson process with rate \(\lambda\)</li>
+<li>Service time follows an exponential distribution with rate \(\mu\)</li>
+<li>Want to see how many people are in the system.</li>
+</ol>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+      <slide class="" id="slide-32" style="background:;">
+  <hgroup>
+    <h2>Initialization</h2>
+  </hgroup>
+  <article>
+    <pre><code class="r">&gt; t.end &lt;- 10^5  # duration of sim
+&gt; t.clock &lt;- 0  # sim time
+&gt; Ta &lt;- 1.3333  # interarrival period
+&gt; Ts &lt;- 1  # service period
+&gt; t1 &lt;- 0  # time for next arrival
+&gt; t2 &lt;- t.end  # time for next departure
+&gt; tn &lt;- t.clock  # tmp var for last event time
+&gt; tb &lt;- 0  # tmp var for last busy-time start
+&gt; n &lt;- 0  # number in system
+&gt; b &lt;- 0  # total busy time
+&gt; c &lt;- 0  # total completions
+&gt; qc &lt;- 0  # plot instantaneous q size
+&gt; tc &lt;- 0  # plot time delta
+&gt; plotSamples &lt;- 100
+&gt; set.seed(1)
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+      <slide class="" id="slide-33" style="background:;">
+  <hgroup>
+    <h2>Running the simulation</h2>
+  </hgroup>
+  <article>
+    <p>The code is <a href="rundes.R">here</a></p>
+
+<pre><code class="r">&gt; source(&quot;rundes.R&quot;)
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+      <slide class="" id="slide-34" style="background:;">
+  <hgroup>
+    <h2>Plotting a result</h2>
+  </hgroup>
+  <article>
+    <pre><code class="r">&gt; plot(tc, qc, type = &quot;s&quot;, xlab = &quot;Time&quot;, ylab = &quot;Instantaneous queue length&quot;, 
++     main = &quot;M/M/1 simulation&quot;)
+</code></pre>
+
+<p><img src="figure/unnamed-chunk-31.png" title="plot of chunk unnamed-chunk-31" alt="plot of chunk unnamed-chunk-31" height="400px" /></p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+      <slide class="segue dark" id="slide-35" style="background:;">
   <hgroup>
     <h2>Thank you</h2>
   </hgroup>
@@ -628,7 +835,7 @@ treatment3   1.421e-15     0.2000  7.105e-15 1.000e+00
   <!-- Presenter Notes -->
 </slide>
 
-      <slide class="" id="slide-26" style="background:;">
+      <slide class="" id="slide-36" style="background:;">
   <hgroup>
     
   </hgroup>

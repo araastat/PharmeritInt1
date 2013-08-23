@@ -205,7 +205,7 @@ as.factor(gear)5  2.168943    2.37790  0.912124 3.712e-01
 ```
 
 <!-- html table generated in R 3.0.1 by xtable 1.7-1 package -->
-<!-- Fri Aug 23 08:48:17 2013 -->
+<!-- Fri Aug 23 11:46:24 2013 -->
 <TABLE border=1>
 <TR> <TH>  </TH> <TH> Estimate </TH> <TH> Std. Error </TH> <TH> t value </TH> <TH> Pr(&gt |t|) </TH>  </TR>
   <TR> <TD align="right"> (Intercept) </TD> <TD align="right"> 34.5882 </TD> <TD align="right"> 7.3448 </TD> <TD align="right"> 4.71 </TD> <TD align="right"> 0.0001 </TD> </TR>
@@ -377,7 +377,7 @@ Coefficients are interpreted as log-ratios.
 ```
 
 <!-- html table generated in R 3.0.1 by xtable 1.7-1 package -->
-<!-- Fri Aug 23 08:48:17 2013 -->
+<!-- Fri Aug 23 11:46:24 2013 -->
 <TABLE border=1>
 <TR> <TH>  </TH> <TH> Estimate </TH> <TH> Std. Error </TH> <TH> z value </TH> <TH> Pr(&gt |z|) </TH>  </TR>
   <TR> <TD align="right"> (Intercept) </TD> <TD align="right"> 3.0445 </TD> <TD align="right"> 0.1709 </TD> <TD align="right"> 17.81 </TD> <TD align="right"> 0.0000 </TD> </TR>
@@ -427,16 +427,28 @@ Coefficients are interpreted as log-ratios.
 
 ---
 
+## Splitting data
+
+
+```r
+> set.seed(135793)
+> library(caret)
+> indx.train <- createDataPartition(y = 1:nrow(mtcars), p = 0.7, list = F)
+> mtcars.train <- mtcars[indx.train, ]
+> mtcars.test <- mtcars[-indx.train, ]
+```
+
+
 ## Random Forests
 
 
 ```r
 > require(randomForest)
-> rf1 <- randomForest(mpg ~ ., data = mtcars, importance = T)
+> rf1 <- randomForest(mpg ~ ., data = mtcars.train, importance = T)
 > varImpPlot(rf1)
 ```
 
-<img src="figure/unnamed-chunk-17.png" title="plot of chunk unnamed-chunk-17" alt="plot of chunk unnamed-chunk-17" height="400px" />
+<img src="figure/unnamed-chunk-18.png" title="plot of chunk unnamed-chunk-18" alt="plot of chunk unnamed-chunk-18" height="400px" />
 
 
 *** pnotes
@@ -449,12 +461,12 @@ Coefficients are interpreted as log-ratios.
 
 ```r
 > library(ggplot2)
-> p1 <- predict(rf1)
-> qplot(mtcars$mpg, p1, xlab = "True", ylab = "predicted") + geom_abline(color = "red") + 
+> p1 <- predict(rf1, newdata = mtcars.test)
+> qplot(mtcars.test$mpg, p1, xlab = "True", ylab = "predicted") + geom_abline(color = "red") + 
 +     geom_smooth()
 ```
 
-<img src="figure/unnamed-chunk-18.png" title="plot of chunk unnamed-chunk-18" alt="plot of chunk unnamed-chunk-18" height="400px" />
+<img src="figure/unnamed-chunk-19.png" title="plot of chunk unnamed-chunk-19" alt="plot of chunk unnamed-chunk-19" height="400px" />
 
 
 ---
@@ -470,11 +482,183 @@ Coefficients are interpreted as log-ratios.
 ```
 
 ```
-[1] 2.409
+[1] 8.931
 ```
 
 
 ---
+## Classification
+
+
+```r
+> library(AppliedPredictiveModeling)
+> data(twoClassData, package = "AppliedPredictiveModeling")
+> twocl <- cbind(classes, predictors)
+> indx.train <- createDataPartition(twocl$classes, p = 0.5, list = F)
+> twocl.train <- twocl[indx.train, ]
+> twocl.test <- twocl[-indx.train, ]
+> str(twocl)
+```
+
+```
+'data.frame':	208 obs. of  3 variables:
+ $ classes   : Factor w/ 2 levels "Class1","Class2": 2 2 2 2 2 2 2 2 2 2 ...
+ $ PredictorA: num  0.158 0.655 0.706 0.199 0.395 ...
+ $ PredictorB: num  0.1609 0.4918 0.6333 0.0881 0.4152 ...
+```
+
+
+---
+## Classification
+
+```r
+> library(gbm)
+> twocl.train <- transform(twocl.train, classes1 = ifelse(classes == "Class2", 
++     1, 0))
+> twocl.test <- transform(twocl.test, classes1 = ifelse(classes == "Class2", 1, 
++     0))
+> model5 <- gbm(classes1 ~ ., data = twocl.train, n.trees = 1000, cv.folds = 5)
+```
+
+```
+Distribution not specified, assuming bernoulli ...
+```
+
+```r
+> p5 <- predict(model5, newdata = twocl.test, n.trees = 500, type = "response")
+```
+
+
+
+```r
+> model6 <- randomForest(classes ~ ., data = twocl.train)
+> p6 <- predict(model6, newdata = twocl.test, type = "prob")[, 2]
+```
+
+
+---
+
+## Classification errors
+
+Misclassification
+
+```r
+> misclas5 <- mean((twocl.test$classes == "Class2") != (p5 > 0.5))
+> misclas6 <- mean(twocl.test$classes != predict(model6, newdata = twocl.test))
+> data.frame(GBM = misclas5, RF = misclas6)
+```
+
+```
+  GBM RF
+1   0  0
+```
+
+
+---
+## ROC curves
+
+
+```r
+> library(ROCR)
+> pred5 <- prediction(p5, twocl.test$classes)
+> perf5 <- performance(pred5, "tpr", "fpr")
+> plot(perf5)
+```
+
+<img src="figure/unnamed-chunk-25.png" title="plot of chunk unnamed-chunk-25" alt="plot of chunk unnamed-chunk-25" height="400px" />
+
+
+---
+## ROC curves
+
+
+```r
+> library(ROCR)
+> pred6 <- prediction(p6, twocl.test$classes)
+> perf6 <- performance(pred6, "tpr", "fpr")
+> plot(perf6)
+```
+
+<img src="figure/unnamed-chunk-26.png" title="plot of chunk unnamed-chunk-26" alt="plot of chunk unnamed-chunk-26" height="400px" />
+
+
+---
+## AUC
+
+
+```r
+> extract.auc <- function(pred) {
++     require(ROCR)
++     perf <- performance(pred, "auc")
++     paste("AUC =", perf@y.values)
++ }
+> data.frame(GBM = extract.auc(pred5), RF = extract.auc(pred6))
+```
+
+```
+      GBM      RF
+1 AUC = 1 AUC = 1
+```
+
+
+---.segue .dark
+
+## Discrete event simulation
+
+---
+
+## The M/M/1 process
+
+The M/M/1 process has a single server who serves incoming clients. 
+
+1. Clients come into the queue according to a Poisson process with rate $\lambda$
+2. Service time follows an exponential distribution with rate $\mu$
+3. Want to see how many people are in the system.
+
+---
+## Initialization
+
+
+```r
+> t.end <- 10^5  # duration of sim
+> t.clock <- 0  # sim time
+> Ta <- 1.3333  # interarrival period
+> Ts <- 1  # service period
+> t1 <- 0  # time for next arrival
+> t2 <- t.end  # time for next departure
+> tn <- t.clock  # tmp var for last event time
+> tb <- 0  # tmp var for last busy-time start
+> n <- 0  # number in system
+> b <- 0  # total busy time
+> c <- 0  # total completions
+> qc <- 0  # plot instantaneous q size
+> tc <- 0  # plot time delta
+> plotSamples <- 100
+> set.seed(1)
+```
+
+
+---
+## Running the simulation
+
+The code is [here](rundes.R)
+
+```r
+> source("rundes.R")
+```
+
+
+
+---
+
+## Plotting a result
+
+
+```r
+> plot(tc, qc, type = "s", xlab = "Time", ylab = "Instantaneous queue length", 
++     main = "M/M/1 simulation")
+```
+<img src="figure/unnamed-chunk-31.png" title="plot of chunk unnamed-chunk-31" alt="plot of chunk unnamed-chunk-31" height="400px" />
 
 
 ---.segue .dark
